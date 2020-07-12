@@ -10,11 +10,14 @@ pipeline {
         sh 'terraform init'
         sh 'terraform plan'
         script { 
-            if (env.CHANGE_ID) {
-               pullRequest.addLabel('Build Failed')
-            } else {
-               echo 'This is not a PR'
-            }
+           if (env.CHANGE_ID) {
+              withCredentials([file(credentialsId: 'gh-creds', variable: 'GH_CREDENTIALS')]) {
+                  pullRequest.setCredentials('', "${GH_CREDENTIALS}")
+                  pullRequest.comment('Terraform Plan running..')
+               }
+           } else {
+               echo 'Executing outside of a PR'
+           }
         }
       }
     }
