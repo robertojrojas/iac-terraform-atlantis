@@ -21,6 +21,7 @@ pipeline {
         sh 'echo "This is build $BUILD_NUMBER of demo $DEMO"'
         sh 'terraform version'
         sh 'printenv'
+        sh 'terraform init'
         sh 'terraform plan'
         script { 
             repo_url='https://github.com/robertojrojas/iac-terraform-atlantis'
