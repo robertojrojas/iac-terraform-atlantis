@@ -1,3 +1,17 @@
+//Pass Status back to GitHub based on Trigger Type.
+def setBuildStatus(String message, String state, String repo_url, String job_name, String commit_sha) {
+    retry(3){
+        step([
+            $class: "GitHubCommitStatusSetter",
+            reposSource: [$class: "ManuallyEnteredRepositorySource", url: repo_url],
+            contextSource: [$class: "ManuallyEnteredCommitContextSource", context: job_name],
+            errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: state]],
+            commitShaSource: [$class: "ManuallyEnteredShaSource", sha: commit_sha],
+            statusBackrefSource: [$class: "ManuallyEnteredBackrefSource", backref: "${BUILD_URL}display/redirect"],
+            statusResultSource: [$class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
+        ]);
+    }
+} 
 pipeline {
   agent any
   stages {
@@ -7,7 +21,12 @@ pipeline {
         sh 'echo "This is build $BUILD_NUMBER of demo $DEMO"'
         sh 'terraform version'
         script { 
-           pullRequest.comment('This PR sTerraform plan....')
+            repo_url='https://github.com/robertojrojas/iac-terraform-atlantis'
+            job_name="${JOB_BASE_NAME}"
+            job_state= can be FAILURE, SUCCESS, PENDING (check gihtub for more)
+            commit_sha="${GITHUB_PR_HEAD_SHA}"
+            message="terraform plan..."
+            sendBuildStatus(message, job_state, repo_url, job_name, commit_sha)
         }
       }
     }
