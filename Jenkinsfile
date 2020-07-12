@@ -27,7 +27,7 @@ pipeline {
             repo_url='https://github.com/robertojrojas/iac-terraform-atlantis'
             job_name="${JOB_BASE_NAME}"
             job_state='SUCCESS'
-            commit_sha="${GITHUB_PR_HEAD_SHA}"
+            commit_sha="${ghprbActualCommit}"
             message="terraform plan..."
             sendBuildStatus(message, job_state, repo_url, job_name, commit_sha)
         }
