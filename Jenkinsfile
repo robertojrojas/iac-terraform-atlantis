@@ -18,6 +18,7 @@ pipeline {
                   echo 'Plan from file'
                   echo "${plan}"
                   //pullRequest.comment('Terraform Plan running..')
+                  input 'Ready to apply the Terraform plan?'
               // }
            } else {
                echo 'Executing outside of a PR'
