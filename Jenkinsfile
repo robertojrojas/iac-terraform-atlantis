@@ -7,8 +7,8 @@ pipeline {
         sh 'echo "This is build $BUILD_NUMBER of demo $DEMO"'
         sh 'terraform version'
         sh 'printenv'
-        sh 'terraform init'
-        sh 'terraform plan -no-color | grep -E "(^.*[#~+-] .*|^[[:punct:]]|Plan|Terraform will)" > plan-output'
+        sh 'terraform init -input=false'
+        sh 'terraform plan -out=tf-plan -input=false -no-color | grep -E "(^.*[#~+-] .*|^[[:punct:]]|Plan|Terraform will)" > plan-output'
         script { 
            if (env.CHANGE_ID) {
               //withCredentials([string(credentialsId: 'gh-token', variable: 'GH_CREDENTIALS')]) {
