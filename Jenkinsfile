@@ -20,6 +20,7 @@ pipeline {
         echo 'This is build $BUILD_NUMBER of demo $DEMO'
         sh 'echo "This is build $BUILD_NUMBER of demo $DEMO"'
         sh 'terraform version'
+        sh 'printenv'
         script { 
             repo_url='https://github.com/robertojrojas/iac-terraform-atlantis'
             job_name="${JOB_BASE_NAME}"
