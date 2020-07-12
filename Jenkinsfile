@@ -1,3 +1,15 @@
+pipeline {
+  agent any
+  stages {
+    stage('stage1') {
+      steps {
+        echo 'This is build $BUILD_NUMBER of demo $DEMO'
+        sh 'echo "This is build $BUILD_NUMBER of demo $DEMO"'
+        sh 'terraform version'
+        sh 'printenv'
+        sh 'terraform init'
+        sh 'terraform plan'
+        script { 
 //Pass Status back to GitHub based on Trigger Type.
 def setBuildStatus(String message, String state, String repo_url, String job_name, String commit_sha) {
     retry(3){
@@ -12,18 +24,6 @@ def setBuildStatus(String message, String state, String repo_url, String job_nam
         ]);
     }
 } 
-pipeline {
-  agent any
-  stages {
-    stage('stage1') {
-      steps {
-        echo 'This is build $BUILD_NUMBER of demo $DEMO'
-        sh 'echo "This is build $BUILD_NUMBER of demo $DEMO"'
-        sh 'terraform version'
-        sh 'printenv'
-        sh 'terraform init'
-        sh 'terraform plan'
-        script { 
             repo_url='https://github.com/robertojrojas/iac-terraform-atlantis'
             job_name="${JOB_BASE_NAME}"
             job_state='SUCCESS'
