@@ -19,6 +19,7 @@ pipeline {
                   echo "${plan}"
                   //pullRequest.comment('Terraform Plan running..')
                   input 'Ready to apply the Terraform plan?'
+                  terraform apply -input=false tfplan 
               // }
            } else {
                echo 'Executing outside of a PR'
