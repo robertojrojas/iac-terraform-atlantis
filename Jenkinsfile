@@ -12,9 +12,10 @@ pipeline {
         script { 
            if (env.CHANGE_ID) {
               //withCredentials([string(credentialsId: 'gh-token', variable: 'GH_CREDENTIALS')]) {
-                  //pullRequest.setCredentials('', "${GH_CREDENTIALS}")
+              withCredentials([usernamePassword(credentialsId: 'gh-up', usernameVariable: 'GHUSERNAME', passwordVariable: 'GHPASSWORD')]) {
+                  pullRequest.setCredentials("${GHUSERNAME}", "${GHPASSWORD}")
                   pullRequest.comment('Terraform Plan running..')
-               //}
+               }
            } else {
                echo 'Executing outside of a PR'
            }
