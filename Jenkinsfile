@@ -8,14 +8,17 @@ pipeline {
         sh 'terraform version'
         sh 'printenv'
         sh 'terraform init'
-        sh 'terraform plan'
+        sh 'terraform plan -no-color | grep -E "(^.*[#~+-] .*|^[[:punct:]]|Plan|Terraform will)" > plan-output'
         script { 
            if (env.CHANGE_ID) {
               //withCredentials([string(credentialsId: 'gh-token', variable: 'GH_CREDENTIALS')]) {
-              withCredentials([usernamePassword(credentialsId: 'gh-up', usernameVariable: 'GHUSERNAME', passwordVariable: 'GHPASSWORD')]) {
-                  pullRequest.setCredentials("${GHUSERNAME}", "${GHPASSWORD}")
-                  pullRequest.comment('Terraform Plan running..')
-               }
+              //withCredentials([usernamePassword(credentialsId: 'gh-up', usernameVariable: 'GHUSERNAME', passwordVariable: 'GHPASSWORD')]) {
+                  //pullRequest.setCredentials("${GHUSERNAME}", "${GHPASSWORD}")
+                  def plan = readFile("plan-output")
+                  echo 'Plan from file'
+                  echo "${plan}"
+                  //pullRequest.comment('Terraform Plan running..')
+              // }
            } else {
                echo 'Executing outside of a PR'
            }
