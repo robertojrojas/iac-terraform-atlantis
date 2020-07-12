@@ -6,6 +6,7 @@ pipeline {
         echo 'This is build $BUILD_NUMBER of demo $DEMO'
         sh 'echo "This is build $BUILD_NUMBER of demo $DEMO"'
         sh 'terraform version'
+        pullRequest.comment('This PR sTerraform plan....')
       }
     }
 
