@@ -11,7 +11,7 @@ pipeline {
         sh 'terraform plan'
         script { 
            if (env.CHANGE_ID) {
-              withCredentials([file(credentialsId: 'gh', variable: 'GH_CREDENTIALS')]) {
+              withCredentials([string(credentialsId: 'gh-token', variable: 'GH_CREDENTIALS')]) {
                   pullRequest.setCredentials('', "${GH_CREDENTIALS}")
                   pullRequest.comment('Terraform Plan running..')
                }
