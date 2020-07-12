@@ -23,7 +23,7 @@ pipeline {
         script { 
             repo_url='https://github.com/robertojrojas/iac-terraform-atlantis'
             job_name="${JOB_BASE_NAME}"
-            job_state= can be FAILURE, SUCCESS, PENDING (check gihtub for more)
+            job_state=SUCCESS
             commit_sha="${GITHUB_PR_HEAD_SHA}"
             message="terraform plan..."
             sendBuildStatus(message, job_state, repo_url, job_name, commit_sha)
